@@ -1,10 +1,12 @@
-build_image:
-	docker build -t fastdfs_delron:test .
+
+IMAGE_NAME?=cr.loongnix.cn/delron/fastdfs:v5.11
+
+image:
+	docker build -t ${IMAGE_NAME} .
 
 clean:
 	docker rmi fastdfs_delron:test
 
-image = fastdfs_delron:test
 
 start_tracker:
 	docker run -d --network=host --name tracker ${image} tracker
@@ -12,8 +14,5 @@ start_tracker:
 start_storage:
 	docker run -d --network=host --name storage -e TRACKER_SERVER=10.130.0.170:22122 -e GROUP_NAME=group1 ${image} storage
 
-tag:
-	docker tag ${image} cr.loongnix.cn/delron/fastdfs:V5.11
-
 push:
-	docker push cr.loongnix.cn/delron/fastdfs:V5.11
+	docker push ${IMAGE_NAME}
